@@ -1,45 +1,64 @@
-// const express = require('express')
-// const logger = require('morgan')
-// const cors = require('cors')
-
-// const contactsRouter = require('./routes/api/contacts')
-
-// const app = express()
-
-// const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
-
-// app.use(logger(formatsLogger))
-// app.use(cors())
-// app.use(express.json())
-
-// app.use('/api/contacts', contactsRouter)
-
-// app.use((req, res) => {
-//   res.status(404).json({ message: 'Not found' })
-// })
-
-// app.use((err, req, res, next) => {
-//   res.status(500).json({ message: err.message })
-// })
-
-// module.exports = app
-
-// "start": "cross-env NODE_ENV=production node ./server.js",
-// "dev": "cross-env NODE_ENV=development nodemon ./server.js",
-
 const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+
+const versionControl = require('./routes/api/versionController');
+
+// const timeOut = [
+//   [9, 10],
+//   [15, 17],
+//   [15, 16],
+//   [14, 16],
+// ];
+
+// const startEnd = [9, 18];
+
+// function workTime(arryTime, time) {
+//   const arry = {};
+
+//   arryTime.forEach(([start, end]) => {
+//     arry[start] = arry[start] > end ? arry[start] : end;
+//   });
+
+//   const od = Object.keys(arry);
+//   const ddo = Object.values(arry);
+
+//   if (od[0] == time[0] && ddo[0] == time[1]) return [];
+
+//   const result = ddo.reduce((acc, el, i) => {
+//     if (el < (od[i + 1] || time[1])) {
+//       acc.push([el, Number(od[i + 1]) || time[1]]);
+//     }
+
+//     return acc;
+//   }, []);
+
+//   if (od[0] > time[0]) result.unshift([time[0], Number(od[0])]);
+
+//   return result;
+// }
+// console.log(workTime(timeOut, startEnd));
 
 const app = express();
 
-app.get('/contacts', (request, response) => {
-  //   console.log(request.url);
-  //   console.log(request.method);
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-  response.send('<h1> Hi world </h1>');
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+
+app.use('/api', versionControl);
+
+const { notFound, serverError } = require('./libs/http-responses');
+
+app.use((req, res) => {
+  res.status(notFound.code).json({ message: notFound.status });
 });
 
-app.get('/', (req, res) => {
-  res.send('<h1>Главная страничка</h1>');
+app.use((err, req, res, next) => {
+  const { status = serverError.code, message = serverError.status } = err;
+
+  res.status(status).json(message);
 });
 
-app.listen(4000, () => console.log('Server start'));
+module.exports = app;
