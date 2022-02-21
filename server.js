@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const { DB_HOST, PORT = 4000 } = process.env;
-// const dbb =
-//   'mongodb+srv://popingalo:popingalov2083@cluster0.sgft6.mongodb.net/db-contacts?retryWrites=true&w=majority';
+
 mongoose
   .connect(DB_HOST)
   .then(() =>
