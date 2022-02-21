@@ -9,11 +9,11 @@ const HTTP_RESPONSES = {
   },
   deleteEl: {
     code: 204,
-    status: '"contact deleted"',
+    status: 'contact deleted',
   },
   badValid: {
     code: 400,
-    status: 'missing required name field',
+    status: error => `${error.details[0].message}`,
   },
   notFound: {
     code: 404,

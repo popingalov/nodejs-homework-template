@@ -2,7 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
-const versionControl = require('./routes/api/versionController');
+const contactsR = require('./routes/api/contacts');
 
 const app = express();
 
@@ -12,7 +12,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use('/api', versionControl);
+app.use('/api/contacts', contactsR);
 
 const { notFound, serverError } = require('./libs/http-responses');
 
