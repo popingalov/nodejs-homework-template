@@ -2,21 +2,35 @@ const express = require('express');
 
 ///
 const { joiSchema, updateFavoriteJoiSchema } = require('../../models/contacts');
-const { controllerSync, validation } = require('../../middlewares');
+const {
+  controllerSync,
+  validation,
+  authenticate,
+} = require('../../middlewares');
 const { contacts } = require('../../controllers');
 ///
 const router = express.Router();
 
-router.get('/', controllerSync(contacts.listContacts));
+router.get('/', authenticate, controllerSync(contacts.listContacts));
 
-router.get('/:contactId', controllerSync(contacts.getContactById));
+router.get(
+  '/:contactId',
+  authenticate,
+  controllerSync(contacts.getContactById),
+);
 
-router.post('/', validation(joiSchema), controllerSync(contacts.addContact));
+router.post(
+  '/',
+  authenticate,
+  validation(joiSchema),
+  controllerSync(contacts.addContact),
+);
 
 router.delete('/:contactId', controllerSync(contacts.removeContact));
 
 router.post(
   '/:contactId',
+  authenticate,
   validation(joiSchema),
   controllerSync(contacts.updateContactById),
 );
@@ -24,6 +38,7 @@ router.post(
 
 router.patch(
   '/:contactId/favorite',
+  authenticate,
   validation(updateFavoriteJoiSchema),
   controllerSync(contacts.updateFavoriteByID),
 );
