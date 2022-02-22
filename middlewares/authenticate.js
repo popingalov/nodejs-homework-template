@@ -25,9 +25,14 @@ const authenticate = async (req, res, next) => {
     const { SECRET_KEY } = process.env;
     const { _id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(_id);
+
     if (!user.token) {
-      throw new CreateError(badAuth.code, badAuth.status);
+      throw new CreateError(
+        badAuth.code,
+        `${badAuth.status} ,or you lost login or password mb invalid token`,
+      );
     }
+
     req.user = user;
 
     next();
