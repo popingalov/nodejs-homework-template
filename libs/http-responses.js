@@ -11,17 +11,25 @@ const HTTP_RESPONSES = {
     code: 204,
     status: 'contact deleted',
   },
+  notThisV: {
+    code: 307,
+    status: 'This version is not ready yet!!! Check out the first version.',
+  },
   badValid: {
     code: 400,
     status: error => `${error.details[0].message}`,
+  },
+  badAuth: {
+    code: 401,
+    status: 'Not authorized',
   },
   notFound: {
     code: 404,
     status: id => `Id ${id} not found`,
   },
-  notThisV: {
-    code: 307,
-    status: 'This version is not ready yet!!! Check out the first version.',
+  сonflict: {
+    code: 409,
+    status: mail => `Email ${mail} in use`,
   },
   serverError: {
     code: 500,
