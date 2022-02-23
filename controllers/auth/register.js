@@ -1,4 +1,5 @@
 const CreateError = require('http-errors');
+const gravatar = require('gravatar');
 //
 
 const { User } = require('../../models');
@@ -11,14 +12,16 @@ const register = async (req, res) => {
   if (user) {
     throw new CreateError(сonflict.code, сonflict.status(email));
   }
-  const newUser = new User({ email });
+
+  const avatarURL = gravatar.url(email);
+  const newUser = new User({ email, avatarURL });
 
   newUser.setPassword(password);
 
   await newUser.save();
   authSucc(
     res,
-   {user:{  email, subscription: 'starter' }},
+    { user: { email, subscription: 'starter' } },
     created.code,
     created.status,
   );
