@@ -1,6 +1,9 @@
 const express = require('express');
 
-const { userJoiSchema } = require('../../models/users');
+const {
+  userJoiSchema,
+  userVarificationJoiSchema,
+} = require('../../models/users');
 const {
   controllerSync,
   validation,
@@ -20,6 +23,13 @@ router.post(
   '/users/login',
   validation(userJoiSchema),
   controllerSync(auth.login),
+);
+router.get('/users/verify/:verifyToken', controllerSync(auth.verifyUser));
+
+router.post(
+  '/users/verify/',
+  validation(userVarificationJoiSchema),
+  controllerSync(auth.verifyUser),
 );
 
 router.get('/users/logout', authenticate, controllerSync(auth.logout));
